@@ -15,10 +15,20 @@ phantom.create(['--proxy-type=http','--proxy='+proxy])
         return page.open('https://fast.com');
     })
     .then(status => {
-        console.log(sitepage.property('content'));
         console.log(status);
+        return sitepage.property('content');
     })
-     .catch(error => {
+    .then(content => {
+        sitepage.evaluate(function(){
+            return document.getElementById('speed-value').innerHTML.trim();
+        })
+        .then(speed => {
+            console.log(speed);
+        });
+        sitepage.close();
+        phInstance.exit();
+    })
+    .catch(error => {
         console.log(error);
         phInstance.exit();
     });
